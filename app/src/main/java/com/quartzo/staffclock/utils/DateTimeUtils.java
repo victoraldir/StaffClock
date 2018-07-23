@@ -23,6 +23,8 @@ public class DateTimeUtils {
         return TIME_PATTERN.matcher(time).matches();
     }
 
+    private static String outputFormatMask = "YYYY-MM-DD HH:MM:SS.SSS";
+    private static SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormatMask);
 
     public static Date parseToDate(String date){
         try {
@@ -34,4 +36,7 @@ public class DateTimeUtils {
         return null;
     }
 
+    public static String formatDate(Date date){
+        return outputDateFormat.format(date);
+    }
 }

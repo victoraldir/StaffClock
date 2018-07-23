@@ -1,4 +1,4 @@
-package com.quartzo.staffclock.geofence;
+package com.quartzo.staffclock;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -13,13 +13,14 @@ import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-import com.quartzo.staffclock.MainActivity;
+import com.quartzo.staffclock.event.EventActivity;
+import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GeofenceTransitionsIntentService extends IntentService {
-    protected static final String TAG = "geofence-transitions-service";
+    protected static final String TAG = "geofence";
 
     public GeofenceTransitionsIntentService() {
         // Use the TAG to name the worker thread.
@@ -97,13 +98,13 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private void sendNotification(String notificationDetails) {
         // Create an explicit content Intent that starts the main Activity.
-        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), EventActivity.class);
 
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
         // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(EventActivity.class);
 
         // Push the content Intent onto the stack.
         stackBuilder.addNextIntent(notificationIntent);

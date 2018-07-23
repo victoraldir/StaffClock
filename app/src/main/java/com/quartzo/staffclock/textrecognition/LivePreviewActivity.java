@@ -35,6 +35,10 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.common.annotation.KeepName;
 import com.quartzo.staffclock.R;
+import com.quartzo.staffclock.ViewModelFactory;
+import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.event.EventViewModel;
+import com.quartzo.staffclock.utils.DateTimeUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +67,7 @@ public final class LivePreviewActivity extends AppCompatActivity
   private CameraSourcePreview preview;
   private GraphicOverlay graphicOverlay;
   private String selectedModel = TEXT_DETECTION;
+  private EventViewModel mEventViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,8 @@ public final class LivePreviewActivity extends AppCompatActivity
     Log.d(TAG, "onCreate");
 
     setContentView(R.layout.activity_live_preview);
+
+    mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(EventViewModel.class);
 
     preview = (CameraSourcePreview) findViewById(R.id.firePreview);
     if (preview == null) {
@@ -287,7 +294,13 @@ public final class LivePreviewActivity extends AppCompatActivity
     if(!dateSet.contains(date)){
       dateSet.add(date);
       vibrate();
-      Toast.makeText(this,"Should insert "+ date, Toast.LENGTH_SHORT).show();
+
+      Event event = new Event("REAL", DateTimeUtils.formatDate(date));
+
+      mEventViewModel.insertEvent(event);
+
+      Toast.makeText(this,event.toString() + " INSERTED", Toast.LENGTH_SHORT).show();
+
     }
   }
 
