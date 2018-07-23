@@ -23,7 +23,7 @@ public class DateTimeUtils {
         return TIME_PATTERN.matcher(time).matches();
     }
 
-    private static String outputFormatMask = "YYYY-MM-DD HH:MM:SS.SSS";
+    private static String outputFormatMask = "yyyy-MM-dd HH:mm:ss";
     private static SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormatMask);
 
     public static Date parseToDate(String date){
