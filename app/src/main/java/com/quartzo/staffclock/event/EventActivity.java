@@ -2,6 +2,7 @@ package com.quartzo.staffclock.event;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,7 +47,7 @@ import java.util.Map;
 public class EventActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         ResultCallback<Status>,
-        GenericDataSource.LoadListCallback<Event>{
+        Observer<List<Event>>{
 
     private static final int RC_ACCESS_FINE_LOCATION = 1;
 
@@ -66,6 +67,8 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
         setSupportActionBar(toolbar);
 
         mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(EventViewModel.class);
+
+        mEventViewModel.getListEvents().observe(this,this);
 
         mContext = this;
 
@@ -154,7 +157,6 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
         if (!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
-        mEventViewModel.getEvents(this);
     }
 
     @Override
@@ -302,17 +304,11 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
-    public void onListLoaded(List<Event> list) {
-
+    public void onChanged(@Nullable List<Event> eventList) {
         mEventListView.setText("");
 
-        for(Event event : list){
+        for(Event event : eventList){
             mEventListView.append(event.toString() + "\n");
         }
-    }
-
-    @Override
-    public void onDataNotAvailable() {
-
     }
 }
