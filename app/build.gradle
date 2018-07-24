@@ -27,6 +27,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
 
+    implementation 'net.danlew:android.joda:2.9.9.4'
+
     // Architecture Components
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"

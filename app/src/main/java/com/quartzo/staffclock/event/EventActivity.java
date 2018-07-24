@@ -13,6 +13,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -35,10 +38,13 @@ import com.quartzo.staffclock.GeofenceTransitionsIntentService;
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.data.WorkTime;
 import com.quartzo.staffclock.data.source.GenericDataSource;
 import com.quartzo.staffclock.utils.Constants;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
 import com.quartzo.staffclock.textrecognition.LivePreviewActivity;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +63,10 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
     protected ArrayList<Geofence> mGeofenceList;
     private Context mContext;
     private EventViewModel mEventViewModel;
-    private TextView mEventListView;
+//    private TextView mEventListView;
+    private List<WorkTime> mWorkTimeList;
+    private RecyclerView mWorkTimeRecycle;
+    private RecyclerView.Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +81,21 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
 
         mContext = this;
 
-        mEventListView = (TextView) findViewById(R.id.eventList);
+        populateWorkTimeList();
+
+        mWorkTimeRecycle = (RecyclerView) findViewById(R.id.work_time_recycle);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mWorkTimeRecycle.setLayoutManager(linearLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mWorkTimeRecycle.getContext(),
+                linearLayoutManager.getOrientation());
+        mWorkTimeRecycle.addItemDecoration(dividerItemDecoration);
+
+        mAdapter = new EventAdapter(mWorkTimeList);
+
+        mWorkTimeRecycle.setAdapter(mAdapter);
+
+//        mEventListView = (TextView) findViewById(R.id.eventList);
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
@@ -92,6 +115,15 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
                 launchActivity();
             }
         });
+    }
+
+    private void populateWorkTimeList(){
+        mWorkTimeList = new ArrayList<>();
+        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
+        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
+        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
+        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
+        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
     }
 
     private boolean checkPermission(){
@@ -305,10 +337,10 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onChanged(@Nullable List<Event> eventList) {
-        mEventListView.setText("");
+//        mEventListView.setText("");
 
         for(Event event : eventList){
-            mEventListView.append(event.toString() + "\n");
+//            mEventListView.append(event.toString() + "\n");
         }
     }
 }
