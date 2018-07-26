@@ -43,10 +43,14 @@ import com.quartzo.staffclock.data.source.GenericDataSource;
 import com.quartzo.staffclock.utils.Constants;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
 import com.quartzo.staffclock.textrecognition.LivePreviewActivity;
+import com.quartzo.staffclock.utils.ListUtils;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,10 +67,9 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
     protected ArrayList<Geofence> mGeofenceList;
     private Context mContext;
     private EventViewModel mEventViewModel;
-//    private TextView mEventListView;
-    private List<WorkTime> mWorkTimeList;
     private RecyclerView mWorkTimeRecycle;
-    private RecyclerView.Adapter mAdapter;
+    private EventAdapter mAdapter;
+    private Map<String, LocalTime> mLocalTimeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +84,6 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
 
         mContext = this;
 
-        populateWorkTimeList();
-
         mWorkTimeRecycle = (RecyclerView) findViewById(R.id.work_time_recycle);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mWorkTimeRecycle.setLayoutManager(linearLayoutManager);
@@ -91,7 +92,10 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
                 linearLayoutManager.getOrientation());
         mWorkTimeRecycle.addItemDecoration(dividerItemDecoration);
 
-        mAdapter = new EventAdapter(mWorkTimeList);
+        mLocalTimeMap = new HashMap<>();
+        mAdapter = new EventAdapter(mLocalTimeMap);
+
+        // 26/07/2018 17:00
 
         mWorkTimeRecycle.setAdapter(mAdapter);
 
@@ -115,15 +119,6 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
                 launchActivity();
             }
         });
-    }
-
-    private void populateWorkTimeList(){
-        mWorkTimeList = new ArrayList<>();
-        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
-        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
-        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
-        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
-        mWorkTimeList.add(new WorkTime(DateTime.now(),DateTime.now()));
     }
 
     private boolean checkPermission(){
@@ -337,10 +332,8 @@ public class EventActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onChanged(@Nullable List<Event> eventList) {
-//        mEventListView.setText("");
-
-        for(Event event : eventList){
-//            mEventListView.append(event.toString() + "\n");
-        }
+        // 27/07/2018 17:00
+        mLocalTimeMap = ListUtils.calculateWorkTime(eventList);
+        mAdapter.swapData(mLocalTimeMap);
     }
 }

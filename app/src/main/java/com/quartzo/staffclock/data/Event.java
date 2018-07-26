@@ -5,6 +5,14 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity(tableName = "event")
 public class Event {
 
@@ -29,6 +37,12 @@ public class Event {
     @NonNull
     public String getDateTime() {
         return dateTime;
+    }
+
+    public DateTime getParseDateTime(){
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTime dt = formatter.parseDateTime(this.dateTime);
+        return dt;
     }
 
     @Override

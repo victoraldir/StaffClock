@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface EventDao {
 
-    @Query("SELECT * FROM Event")
+    @Query("SELECT * FROM Event GROUP BY datetime(date_time) ORDER BY datetime(date_time) DESC")
     LiveData<List<Event>> getEvents();
 
     @Query("SELECT * FROM Event")

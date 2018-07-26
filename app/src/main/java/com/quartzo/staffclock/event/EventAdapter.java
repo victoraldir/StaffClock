@@ -9,15 +9,28 @@ import android.widget.TextView;
 
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.data.WorkTime;
+import com.quartzo.staffclock.utils.DateUtils;
 
+import org.joda.time.LocalTime;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
-    private List<WorkTime> mWorkTimeList;
+    private Map<String, LocalTime> mLocalTimeMap;
+    private List<String> mDates;
 
-    public EventAdapter(List<WorkTime> workTimeList) {
-        this.mWorkTimeList = workTimeList;
+    public EventAdapter(Map<String, LocalTime> localTimeMap) {
+        this.mLocalTimeMap = localTimeMap;
+        mDates = new ArrayList<>(mLocalTimeMap.keySet());
+    }
+
+    public void swapData(@NonNull Map<String, LocalTime> localTimeMap){
+        this.mLocalTimeMap =localTimeMap;
+        mDates = new ArrayList<>(mLocalTimeMap.keySet());
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -30,15 +43,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        final WorkTime workTime = mWorkTimeList.get(position);
+        String date = mDates.get(position);
 
-        holder.title.setText(workTime.getWorkedTime().toString());
-        holder.subtitle.setText(workTime.getDateTime().toString());
+        final LocalTime workTime = mLocalTimeMap.get(mDates.get(position));
+
+        holder.title.setText(date);
+        holder.subtitle.setText(DateUtils.formatTime(workTime));
     }
 
     @Override
     public int getItemCount() {
-        return mWorkTimeList != null ? mWorkTimeList.size() : 0;
+        return mDates != null ? mDates.size() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
