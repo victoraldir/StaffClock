@@ -8,52 +8,42 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quartzo.staffclock.R;
-import com.quartzo.staffclock.data.WorkTime;
-import com.quartzo.staffclock.utils.DateUtils;
+import com.quartzo.staffclock.data.Event;
 
-import org.joda.time.LocalTime;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
-    private Map<String, LocalTime> mLocalTimeMap;
-    private List<String> mDates;
+    private List<Event> mEventList;
 
-    public EventAdapter(Map<String, LocalTime> localTimeMap) {
-        this.mLocalTimeMap = localTimeMap;
-        mDates = new ArrayList<>(mLocalTimeMap.keySet());
+    public EventAdapter(List<Event> eventList) {
+        this.mEventList = eventList;
     }
 
-    public void swapData(@NonNull Map<String, LocalTime> localTimeMap){
-        this.mLocalTimeMap =localTimeMap;
-        mDates = new ArrayList<>(mLocalTimeMap.keySet());
+    public void swapData(@NonNull List<Event> eventList){
+        this.mEventList = eventList;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_time, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_event, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        String date = mDates.get(position);
+        Event event = mEventList.get(position);
 
-        final LocalTime workTime = mLocalTimeMap.get(mDates.get(position));
-
-        holder.title.setText(date);
-        holder.subtitle.setText(DateUtils.formatTime(workTime));
+        holder.title.setText(event.getDateTime());
+        holder.subtitle.setText(event.getType());
     }
 
     @Override
     public int getItemCount() {
-        return mDates != null ? mDates.size() : 0;
+        return mEventList != null ? mEventList.size() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

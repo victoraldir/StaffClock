@@ -39,8 +39,6 @@ public class EventRepository implements EventDataSource {
         return INSTANCE;
     }
 
-    //10/01/2018 18:45
-
     @Override
     public LiveData<List<Event>> getEvents() {
         return mEventDataSource.getEvents();
@@ -67,6 +65,11 @@ public class EventRepository implements EventDataSource {
                 callback.onDataNotAvailable();
             }
         });
+    }
+
+    @Override
+    public void getEventsAsc(@NonNull LoadListCallback<Event> callback, String date) {
+
     }
 
     @Override

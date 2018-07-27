@@ -14,6 +14,8 @@ public interface EventDataSource extends GenericDataSource {
 
     void getEvents(@NonNull GenericDataSource.LoadListCallback<Event> callback);
 
+    void getEventsAsc(@NonNull GenericDataSource.LoadListCallback<Event> callback, String date);
+
     void insertEvents(Event... events);
 
 }

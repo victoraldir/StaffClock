@@ -30,7 +30,7 @@
             android:value="ocr" />
 
         <activity
-            android:name=".event.EventActivity"
+            android:name=".worktime.WorkTimeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -40,8 +40,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".textrecognition.LivePreviewActivity" android:exported="true">
-        </activity>
+        <activity android:name=".textrecognition.LivePreviewActivity" android:exported="true"/>
+        <activity android:name=".event.EventActivity"
+            android:parentActivityName=".worktime.WorkTimeActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

@@ -74,6 +74,4 @@ public class EventDataSourceImpl implements EventDataSource {
 
         mAppExecutors.diskIO().execute(insertEvent);
     }
-
-    // 19/07/2018 18:00
 }

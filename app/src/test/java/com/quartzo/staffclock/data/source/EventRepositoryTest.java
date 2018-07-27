@@ -3,13 +3,9 @@ package com.quartzo.staffclock.data.source;
 import com.quartzo.staffclock.data.source.local.event.EventDataSource;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.hamcrest.CoreMatchers.any;
-import static org.mockito.Mockito.verify;
 
 
 public class EventRepositoryTest {

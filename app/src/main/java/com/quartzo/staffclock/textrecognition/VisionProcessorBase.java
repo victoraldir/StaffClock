@@ -13,7 +13,6 @@
 // limitations under the License.
 package com.quartzo.staffclock.textrecognition;
 
-import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.annotation.NonNull;
 

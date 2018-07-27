@@ -26,7 +26,6 @@ import com.quartzo.staffclock.utils.DateTimeUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 /** Processor for the text recognition demo. */
 public class TextRecognitionProcessor extends VisionProcessorBase<FirebaseVisionText> {

@@ -10,6 +10,7 @@ import com.quartzo.staffclock.data.source.local.StaffClockDatabase;
 import com.quartzo.staffclock.data.source.local.event.EventDataSourceImpl;
 import com.quartzo.staffclock.event.EventViewModel;
 import com.quartzo.staffclock.utils.AppExecutors;
+import com.quartzo.staffclock.worktime.WorkTimeViewModel;
 
 import static com.google.android.gms.common.internal.Preconditions.checkNotNull;
 
@@ -47,6 +48,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
         if (modelClass.isAssignableFrom(EventViewModel.class)) {
             return (T) new EventViewModel(mEventRepository);
+        }else if (modelClass.isAssignableFrom(WorkTimeViewModel.class)) {
+            return (T) new WorkTimeViewModel(mEventRepository);
         }
 
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
