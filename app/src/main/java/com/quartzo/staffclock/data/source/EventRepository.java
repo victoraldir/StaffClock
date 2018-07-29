@@ -68,8 +68,8 @@ public class EventRepository implements EventDataSource {
     }
 
     @Override
-    public void getEventsAsc(@NonNull LoadListCallback<Event> callback, String date) {
-
+    public LiveData<List<Event>> getEventsByDate(String date) {
+        return mEventDataSource.getEventsByDate(date);
     }
 
     @Override

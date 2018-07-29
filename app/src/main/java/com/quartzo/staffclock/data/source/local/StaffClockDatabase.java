@@ -44,5 +44,10 @@ public abstract class StaffClockDatabase extends RoomDatabase {
         database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-25 12:00:00')");
         database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-25 13:00:00')");
         database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-25 17:00:00')");
+
+        database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-26 07:00:00')");
+        database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-26 12:00:00')");
+        database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-26 13:00:00')");
+        database.execSQL("insert into event(type,date_time) values ('NORMAL','2018-07-26 17:00:00')");
     }
 }

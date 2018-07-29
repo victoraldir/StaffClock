@@ -22,9 +22,9 @@ public class EventViewModel extends ViewModel {
         mEventRepository.getEvents(callback);
     }
 
-    public LiveData<List<Event>> getListEvents() {
+    public LiveData<List<Event>> getListEventsByDate(String date) {
         if (mListEvents == null) {
-            mListEvents = mEventRepository.getEvents();
+            mListEvents = mEventRepository.getEventsByDate(date);
         }
         return mListEvents;
     }

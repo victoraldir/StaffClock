@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.utils.DateTimeUtils;
+import com.quartzo.staffclock.utils.DateUtils;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         Event event = mEventList.get(position);
 
-        holder.title.setText(event.getDateTime());
+        holder.title.setText(DateUtils.formatTime(event.getParseDateTime()));
         holder.subtitle.setText(event.getType());
     }
 

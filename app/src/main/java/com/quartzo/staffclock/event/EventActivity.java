@@ -28,7 +28,12 @@ public class EventActivity extends AppCompatActivity implements Observer<List<Ev
         setContentView(R.layout.activity_event);
 
         EventViewModel mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(EventViewModel.class);
-        mEventViewModel.getListEvents().observe(this,this);
+
+        String dateArgument = getIntent().getExtras().getString(ARG_DATE);
+
+        getSupportActionBar().setTitle(dateArgument);
+
+        mEventViewModel.getListEventsByDate(dateArgument).observe(this,this);
 
         RecyclerView mWorkTimeRecycle = (RecyclerView) findViewById(R.id.work_time_recycle);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

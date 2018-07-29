@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.data.source.GenericDataSource;
 import com.quartzo.staffclock.utils.AppExecutors;
 
 import java.util.List;
@@ -60,6 +61,11 @@ public class EventDataSourceImpl implements EventDataSource {
 
         mAppExecutors.diskIO().execute(getEventsTask);
 
+    }
+
+    @Override
+    public LiveData<List<Event>> getEventsByDate(String date) {
+        return mEventDao.getEventsByDate(date + " 00:00:00",date + " 23:59:59");
     }
 
     @Override
