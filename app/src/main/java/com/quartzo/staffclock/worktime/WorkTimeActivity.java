@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,6 +31,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +43,7 @@ import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.data.WorkTime;
 import com.quartzo.staffclock.event.EventActivity;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
+import com.quartzo.staffclock.interfaces.Callbacks;
 import com.quartzo.staffclock.textrecognition.LivePreviewActivity;
 import com.quartzo.staffclock.utils.Constants;
 import com.quartzo.staffclock.utils.ListUtils;
@@ -55,7 +59,8 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         GoogleApiClient.OnConnectionFailedListener,
         ResultCallback<Status>,
         Observer<List<Event>>,
-        WorkTimeCallback{
+        Callbacks.WorkTimeCallback,
+        LocationListener {
 
     private static final int RC_ACCESS_FINE_LOCATION = 1;
 
@@ -106,7 +111,22 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Button btnAddGeofence = (Button) findViewById(R.id.btn_add_geofence);
+        btnAddGeofence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addGeofencesButtonHandler();
+            }
+        });
+        Button btnRemoveGeofence = (Button) findViewById(R.id.btn_remove_geofence);
+        btnRemoveGeofence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeGeofencesButtonHandler();
+            }
+        });
+
+        com.github.clans.fab.FloatingActionButton fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,6 +201,15 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        //stop location updates when Activity is no longer active
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()) {
@@ -217,7 +246,7 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         return super.onOptionsItemSelected(item);
     }
 
-    public void addGeofencesButtonHandler(View view) {
+    public void addGeofencesButtonHandler() {
 
         if(checkPermission()){
             addGeofence();
@@ -225,7 +254,7 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
 
     }
 
-    public void removeGeofencesButtonHandler(View view) {
+    public void removeGeofencesButtonHandler() {
         if(checkPermission()){
             removeGeofence();
         }
@@ -296,17 +325,18 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        Toast.makeText(this,"onConnected fired",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiClient.connect();
+        Toast.makeText(this,"onConnectionSuspended fired",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this,"onConnectionFailed fired",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -331,16 +361,19 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     @Override
-    public void onWorkTimeClicked(String date) {
+    public void onWorkTimeClicked(String date, String workedTime) {
         Bundle bundle = new Bundle();
         bundle.putString(EventActivity.ARG_DATE,date);
+        bundle.putString(EventActivity.ARG_TIME,workedTime);
         Intent it = new Intent(this, EventActivity.class);
         it.putExtras(bundle);
         startActivity(it);
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this,"Lat: " + location.getLatitude() + "Lng : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+    }
 }
 
-interface WorkTimeCallback{
-    void onWorkTimeClicked(String date);
-}
+

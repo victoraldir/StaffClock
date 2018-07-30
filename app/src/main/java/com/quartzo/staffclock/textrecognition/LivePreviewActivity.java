@@ -38,6 +38,7 @@ import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.event.EventViewModel;
+import com.quartzo.staffclock.utils.Constants;
 import com.quartzo.staffclock.utils.DateTimeUtils;
 
 import java.io.IOException;
@@ -295,7 +296,7 @@ public final class LivePreviewActivity extends AppCompatActivity
       dateSet.add(date);
       vibrate();
 
-      Event event = new Event("REAL", DateTimeUtils.formatDate(date));
+      Event event = new Event(Constants.TYPE_REAL, DateTimeUtils.formatDate(date));
 
       mEventViewModel.insertEvent(event);
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.interfaces.Callbacks;
 import com.quartzo.staffclock.utils.DateTimeUtils;
 import com.quartzo.staffclock.utils.DateUtils;
 
@@ -17,13 +18,15 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
 
     private List<Event> mEventList;
+    private Callbacks.EventCallback mCallback;
 
-    public EventAdapter(List<Event> eventList) {
-        this.mEventList = eventList;
+    public EventAdapter(List<Event> eventList, Callbacks.EventCallback callback) {
+        mEventList = eventList;
+        mCallback = callback;
     }
 
     public void swapData(@NonNull List<Event> eventList){
-        this.mEventList = eventList;
+        mEventList = eventList;
         notifyDataSetChanged();
     }
 
@@ -37,10 +40,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Event event = mEventList.get(position);
+        final Event event = mEventList.get(position);
 
         holder.title.setText(DateUtils.formatTime(event.getParseDateTime()));
         holder.subtitle.setText(event.getType());
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mCallback.onLongEventClicked(event);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -52,10 +63,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         private TextView title;
         private TextView subtitle;
+        private View mView;
 
         public ViewHolder(View view) {
             super(view);
 
+            mView = view;
             title = view.findViewById(R.id.title);
             subtitle = view.findViewById(R.id.subtitle);
         }

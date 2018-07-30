@@ -68,13 +68,18 @@ public class EventRepository implements EventDataSource {
     }
 
     @Override
-    public LiveData<List<Event>> getEventsByDate(String date) {
-        return mEventDataSource.getEventsByDate(date);
+    public LiveData<List<Event>> getEventsByDate(String date, String type) {
+        return mEventDataSource.getEventsByDate(date,type);
     }
 
     @Override
     public void insertEvents(Event... events) {
         mEventDataSource.insertEvents(events);
+    }
+
+    @Override
+    public void deleteEvents(Event... events) {
+        mEventDataSource.deleteEvents(events);
     }
 
     private void refreshCacheSection(List<Event> eventList) {

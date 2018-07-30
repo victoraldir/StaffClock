@@ -14,8 +14,9 @@ public interface EventDataSource extends GenericDataSource {
 
     void getEvents(@NonNull GenericDataSource.LoadListCallback<Event> callback);
 
-    LiveData<List<Event>> getEventsByDate(String date);
+    LiveData<List<Event>> getEventsByDate(String date, String type);
 
     void insertEvents(Event... events);
 
+    void deleteEvents(Event... events);
 }

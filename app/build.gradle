@@ -28,6 +28,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
 
     implementation 'net.danlew:android.joda:2.9.9.4'
+    implementation 'com.github.clans:fab:1.6.4'
 
     // Architecture Components
     implementation "android.arch.persistence.room:runtime:1.1.1"

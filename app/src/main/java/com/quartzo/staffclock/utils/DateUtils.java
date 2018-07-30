@@ -23,8 +23,8 @@ public class DateUtils {
         return dtfDate.print(dateTime);
     }
 
-    public static String formatDateDDMMYYY(DateTime dateTime){
-        return dtfDateDDMMYY.print(dateTime);
+    public static String formatDateDDMMYYY(String dateTime){
+        return dtfDateDDMMYY.print(dtfDate.parseDateTime(dateTime));
     }
 
 }

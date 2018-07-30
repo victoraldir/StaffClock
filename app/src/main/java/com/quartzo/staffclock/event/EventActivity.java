@@ -1,53 +1,52 @@
 package com.quartzo.staffclock.event;
 
-import android.arch.lifecycle.Observer;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
+import com.quartzo.staffclock.interfaces.Callbacks;
+import com.quartzo.staffclock.utils.DateUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class EventActivity extends AppCompatActivity implements Observer<List<Event>>{
+public class EventActivity extends AppCompatActivity implements Callbacks.EventCallback {
 
     public static final String ARG_DATE = ".date";
-    private EventAdapter mAdapter;
+    public static final String ARG_TIME = ".time";
+    private String mDateArgument;
+    private String mTimeArgument;
+    private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+    private ViewPager mViewPager;
+    private static final String[] TABS = {"REAL","GEOFENCE"};
+    private EventViewModel mEventViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        EventViewModel mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(EventViewModel.class);
+        mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(EventViewModel.class);
 
-        String dateArgument = getIntent().getExtras().getString(ARG_DATE);
+        mDateArgument = getIntent().getExtras().getString(ARG_DATE);
+        mTimeArgument = getIntent().getExtras().getString(ARG_TIME);
 
-        getSupportActionBar().setTitle(dateArgument);
+        getSupportActionBar().setTitle(DateUtils.formatDateDDMMYYY(mDateArgument));
+        getSupportActionBar().setSubtitle(mTimeArgument + " worked");
 
-        mEventViewModel.getListEventsByDate(dateArgument).observe(this,this);
-
-        RecyclerView mWorkTimeRecycle = (RecyclerView) findViewById(R.id.work_time_recycle);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mWorkTimeRecycle.setLayoutManager(linearLayoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mWorkTimeRecycle.getContext(),
-                linearLayoutManager.getOrientation());
-        mWorkTimeRecycle.addItemDecoration(dividerItemDecoration);
-
-        List<Event> mEventList = new ArrayList<>();
-        mAdapter = new EventAdapter(mEventList);
-
-        mWorkTimeRecycle.setAdapter(mAdapter);
-
+        // ViewPager and its adapters use support library
+        // fragments, so use getSupportFragmentManager.
+        mDemoCollectionPagerAdapter =
+                new DemoCollectionPagerAdapter(
+                        getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
     }
 
     @Override
@@ -68,7 +67,40 @@ public class EventActivity extends AppCompatActivity implements Observer<List<Ev
     }
 
     @Override
-    public void onChanged(@Nullable List<Event> eventList) {
-        mAdapter.swapData(eventList);
+    public void onLongEventClicked(Event event) {
+        Toast.makeText(this,"Should delete event: " + event.toString(), Toast.LENGTH_SHORT).show();
+        mEventViewModel.deleteEvent(event);
     }
+
+    // Since this is an object collection, use a FragmentStatePagerAdapter,
+// and NOT a FragmentPagerAdapter.
+    public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+        public DemoCollectionPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            Fragment fragment = new EventFragment();
+            Bundle args = new Bundle();
+            // Our object is just an integer :-P
+            args.putString(EventFragment.ARG_DATE, mDateArgument);
+            args.putString(EventFragment.ARG_TIME, mTimeArgument);
+            args.putString(EventFragment.ARG_TYPE, TABS[i]);
+
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return TABS.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TABS[position];
+        }
+    }
+
 }

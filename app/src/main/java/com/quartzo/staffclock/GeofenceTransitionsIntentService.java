@@ -13,14 +13,21 @@ import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
+import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.event.EventActivity;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
+import com.quartzo.staffclock.utils.Constants;
+import com.quartzo.staffclock.utils.DateTimeUtils;
+import com.quartzo.staffclock.worktime.WorkTimeViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GeofenceTransitionsIntentService extends IntentService {
     protected static final String TAG = "geofence";
+
+    private WorkTimeViewModel mEventViewModel;
 
     public GeofenceTransitionsIntentService() {
         // Use the TAG to name the worker thread.
@@ -49,6 +56,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+
+            mEventViewModel = ViewModelFactory.getInstance(getApplication()).create(WorkTimeViewModel.class);
+
+            mEventViewModel.insertEvent(new Event(Constants.TYPE_GEOFENCE, DateTimeUtils.formatDate(new Date())));
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
@@ -118,6 +129,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         // Define the notification settings.
         builder.setColor(Color.RED)
+                .setSmallIcon(R.drawable.ic_pin_drop)
                 .setContentTitle(notificationDetails)
                 .setContentText("Click notification to return to App")
                 .setContentIntent(notificationPendingIntent);

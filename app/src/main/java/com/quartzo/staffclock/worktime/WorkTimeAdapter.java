@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quartzo.staffclock.R;
+import com.quartzo.staffclock.interfaces.Callbacks;
 import com.quartzo.staffclock.utils.DateUtils;
 
 import org.joda.time.LocalTime;
@@ -20,9 +21,9 @@ public class WorkTimeAdapter extends RecyclerView.Adapter<WorkTimeAdapter.ViewHo
 
     private Map<String, LocalTime> mLocalTimeMap;
     private List<String> mDates;
-    private WorkTimeCallback mCallback;
+    private Callbacks.WorkTimeCallback mCallback;
 
-    public WorkTimeAdapter(Map<String, LocalTime> localTimeMap, WorkTimeCallback callback) {
+    public WorkTimeAdapter(Map<String, LocalTime> localTimeMap, Callbacks.WorkTimeCallback callback) {
         this.mLocalTimeMap = localTimeMap;
         mDates = new ArrayList<>(mLocalTimeMap.keySet());
         mCallback = callback;
@@ -48,13 +49,13 @@ public class WorkTimeAdapter extends RecyclerView.Adapter<WorkTimeAdapter.ViewHo
 
         final LocalTime workTime = mLocalTimeMap.get(mDates.get(position));
 
-        holder.title.setText(date);
+        holder.title.setText(DateUtils.formatDateDDMMYYY(date));
         holder.subtitle.setText(DateUtils.formatTime(workTime));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.onWorkTimeClicked(date);
+                mCallback.onWorkTimeClicked(date,DateUtils.formatTime(workTime));
             }
         });
     }

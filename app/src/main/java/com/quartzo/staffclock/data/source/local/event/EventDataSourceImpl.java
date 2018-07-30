@@ -37,6 +37,7 @@ public class EventDataSourceImpl implements EventDataSource {
         return mEventDao.getEvents();
     }
 
+    // 30/07/2018 08:00
     @Override
     public void getEvents(@NonNull final LoadListCallback<Event> callback) {
 
@@ -64,8 +65,8 @@ public class EventDataSourceImpl implements EventDataSource {
     }
 
     @Override
-    public LiveData<List<Event>> getEventsByDate(String date) {
-        return mEventDao.getEventsByDate(date + " 00:00:00",date + " 23:59:59");
+    public LiveData<List<Event>> getEventsByDate(String date, String type) {
+        return mEventDao.getEventsByDate(date + " 00:00:00",date + " 23:59:59", type);
     }
 
     @Override
@@ -79,5 +80,17 @@ public class EventDataSourceImpl implements EventDataSource {
         };
 
         mAppExecutors.diskIO().execute(insertEvent);
+    }
+
+    @Override
+    public void deleteEvents(final Event... events) {
+        Runnable deleteEvent = new Runnable() {
+            @Override
+            public void run() {
+                mEventDao.deleteEvents(events);
+            }
+        };
+
+        mAppExecutors.diskIO().execute(deleteEvent);
     }
 }
