@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -33,6 +35,8 @@ import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.common.FirebaseVisionLatLng;
@@ -63,6 +67,7 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         LocationListener {
 
     private static final int RC_ACCESS_FINE_LOCATION = 1;
+    private static final int RC_PLACE_PICKER = 2;
 
     private GeofencingClient mGeofencingClient;
     private PendingIntent mGeofencePendingIntent;
@@ -126,6 +131,15 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
             }
         });
 
+        Button btnPickPlace = (Button) findViewById(R.id.btn_place_picker);
+        btnPickPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                launchPickActivity();
+            }
+        });
+
         com.github.clans.fab.FloatingActionButton fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +147,27 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
                 launchActivity();
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_PLACE_PICKER) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void launchPickActivity(){
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), RC_PLACE_PICKER);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean checkPermission(){
@@ -161,7 +196,7 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
                             entry.getValue().getLongitude(),
                             Constants.GEOFENCE_RADIUS_IN_METERS
                     )
-                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                             Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
@@ -279,8 +314,6 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
                     Toast.makeText(mContext, "Failure when adding Geofence. " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
-
 
         } catch (SecurityException securityException) {
             // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.

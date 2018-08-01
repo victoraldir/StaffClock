@@ -30,6 +30,8 @@ dependencies {
     implementation 'net.danlew:android.joda:2.9.9.4'
     implementation 'com.github.clans:fab:1.6.4'
 
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+
     // Architecture Components
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"

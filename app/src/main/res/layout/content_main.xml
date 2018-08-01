@@ -9,6 +9,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <Button
+        android:id="@+id/btn_place_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Place Picker"/>
+
+    <Button
         android:id="@+id/btn_add_geofence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
