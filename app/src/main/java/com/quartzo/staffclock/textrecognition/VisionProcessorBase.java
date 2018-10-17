@@ -14,7 +14,7 @@
 package com.quartzo.staffclock.textrecognition;
 
 import android.media.Image;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

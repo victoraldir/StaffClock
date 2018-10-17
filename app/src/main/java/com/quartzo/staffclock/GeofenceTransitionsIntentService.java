@@ -6,8 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -74,9 +74,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
-        } else {
-            // Log the error.
-        }
+        }  // Log the error.
+
     }
 
     private String getGeofenceTransitionDetails(

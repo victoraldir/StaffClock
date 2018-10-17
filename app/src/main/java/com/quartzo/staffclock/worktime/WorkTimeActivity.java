@@ -2,22 +2,21 @@ package com.quartzo.staffclock.worktime;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,12 +38,10 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.vision.common.FirebaseVisionLatLng;
 import com.quartzo.staffclock.GeofenceTransitionsIntentService;
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
-import com.quartzo.staffclock.data.WorkTime;
 import com.quartzo.staffclock.event.EventActivity;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
 import com.quartzo.staffclock.interfaces.Callbacks;
@@ -111,7 +108,7 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         mGeofencingClient = LocationServices.getGeofencingClient(this);
 
         // Get the geofences used. Geofence data is hard coded in this sample.
-        populateGeofenceList();
+//        populateGeofenceList();
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
@@ -152,21 +149,28 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_PLACE_PICKER) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+                Place place = PlacePicker.getPlace(mContext, data);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                populateGeofenceList(place);
+                removeGeofence();
+                addGeofence();
             }
         }
     }
 
     public void launchPickActivity(){
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        try {
-            startActivityForResult(builder.build(this), RC_PLACE_PICKER);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
+
+        if(checkPermission()) {
+
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            try {
+                startActivityForResult(builder.build(this), RC_PLACE_PICKER);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -187,20 +191,35 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
 
     }
 
-    public void populateGeofenceList() {
-        for (Map.Entry<String, FirebaseVisionLatLng> entry : Constants.LANDMARKS.entrySet()) {
-            mGeofenceList.add(new Geofence.Builder()
-                    .setRequestId(entry.getKey())
-                    .setCircularRegion(
-                            entry.getValue().getLatitude(),
-                            entry.getValue().getLongitude(),
-                            Constants.GEOFENCE_RADIUS_IN_METERS
-                    )
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build());
-        }
+    public void populateGeofenceList(Place place) {
+
+        mGeofenceList.clear();
+
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId(Constants.GEOFENCE_ID)
+                .setCircularRegion(
+                        place.getLatLng().latitude,
+                        place.getLatLng().longitude,
+                        Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build());
+
+//        for (Map.Entry<String, FirebaseVisionLatLng> entry : Constants.LANDMARKS.entrySet()) {
+//            mGeofenceList.add(new Geofence.Builder()
+//                    .setRequestId(entry.getKey())
+//                    .setCircularRegion(
+//                            entry.getValue().getLatitude(),
+//                            entry.getValue().getLongitude(),
+//                            Constants.GEOFENCE_RADIUS_IN_METERS
+//                    )
+//                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+//                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                            Geofence.GEOFENCE_TRANSITION_EXIT)
+//                    .build());
+//        }
     }
 
     @Override
@@ -274,8 +293,12 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_pin:
+                launchPickActivity();
+                break;
+            case R.id.action_settings:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

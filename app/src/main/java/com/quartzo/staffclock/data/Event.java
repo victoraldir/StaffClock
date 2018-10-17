@@ -1,9 +1,9 @@
 package com.quartzo.staffclock.data;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

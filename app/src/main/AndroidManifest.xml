@@ -5,9 +5,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.VIBRATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -21,15 +20,15 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY_GOES_HERE" />
-
-        <service android:name=".GeofenceTransitionsIntentService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:value="AIzaSyB1kdtsJsCZ_F-YjHvbrWbj-3CME-LmrPw" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
+
+        <service android:name=".GeofenceTransitionsIntentService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
             android:name=".worktime.WorkTimeActivity"
@@ -46,7 +45,4 @@
         <activity android:name=".event.EventActivity"
             android:parentActivityName=".worktime.WorkTimeActivity"/>
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
 </manifest>

@@ -1,7 +1,7 @@
 package com.quartzo.staffclock.data.source.local.event;
 
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.data.source.GenericDataSource;

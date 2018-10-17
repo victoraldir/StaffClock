@@ -1,7 +1,7 @@
 package com.quartzo.staffclock.event;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.interfaces.Callbacks;
-import com.quartzo.staffclock.utils.DateTimeUtils;
 import com.quartzo.staffclock.utils.DateUtils;
 
 import java.util.List;

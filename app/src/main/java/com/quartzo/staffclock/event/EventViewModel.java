@@ -1,7 +1,7 @@
 package com.quartzo.staffclock.event;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.data.source.EventRepository;

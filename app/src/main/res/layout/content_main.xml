@@ -12,26 +12,28 @@
         android:id="@+id/btn_place_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="Place Picker"/>
 
     <Button
         android:id="@+id/btn_add_geofence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="add geofence"/>
 
     <Button
         android:id="@+id/btn_remove_geofence"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="remove geofence"/>
 
-<android.support.v7.widget.RecyclerView
+<androidx.recyclerview.widget.RecyclerView
         tools:context=".event.EventActivity"
         tools:showIn="@layout/activity_main"
-
         android:id="@+id/work_time_recycle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

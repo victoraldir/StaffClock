@@ -2,8 +2,8 @@ package com.quartzo.staffclock;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.quartzo.staffclock.data.source.EventRepository;
 import com.quartzo.staffclock.data.source.local.StaffClockDatabase;
