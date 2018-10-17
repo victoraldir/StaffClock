@@ -20,7 +20,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB1kdtsJsCZ_F-YjHvbrWbj-3CME-LmrPw" />
+            android:value="YOUR_API_GOES_HERE" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
