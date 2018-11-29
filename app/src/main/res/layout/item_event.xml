@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
@@ -11,9 +16,9 @@
         android:layout_height="wrap_content"
         android:text="Title"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:paddingLeft="8dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="16dp"/>
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        />
 
     <TextView
         android:id="@+id/subtitle"
@@ -21,7 +26,18 @@
         android:layout_height="wrap_content"
         android:text="Subtitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
-        android:paddingLeft="8dp"
-        android:paddingBottom="16dp" />
+        android:paddingLeft="16dp"
+        android:paddingBottom="16dp"
+        />
 
-</LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_delete"/>
+
+</FrameLayout>

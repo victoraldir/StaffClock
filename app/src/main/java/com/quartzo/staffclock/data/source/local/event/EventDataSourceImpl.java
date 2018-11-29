@@ -64,8 +64,8 @@ public class EventDataSourceImpl implements EventDataSource {
     }
 
     @Override
-    public LiveData<List<Event>> getEventsByDate(String date, String type) {
-        return mEventDao.getEventsByDate(date + " 00:00:00",date + " 23:59:59", type);
+    public LiveData<List<Event>> getEventsByDate(String date) {
+        return mEventDao.getEventsByDate(date + " 00:00:00",date + " 23:59:59");
     }
 
     @Override

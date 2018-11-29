@@ -33,7 +33,21 @@
         fab:menu_icon="@drawable/fab_add">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/fab_btn_finger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_finger"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccentPressed"
+            fab:fab_colorRipple="@android:color/white"
+            fab:fab_size="mini"
+            fab:fab_label="Clock-in"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_btn_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"

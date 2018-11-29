@@ -36,6 +36,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.quartzo.staffclock.GeofenceTransitionsIntentService;
@@ -43,15 +44,19 @@ import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.event.EventActivity;
+import com.quartzo.staffclock.exceptions.DateTimeNotFoundException;
 import com.quartzo.staffclock.geofence.GeofenceErrorMessages;
 import com.quartzo.staffclock.interfaces.Callbacks;
 import com.quartzo.staffclock.textrecognition.LivePreviewActivity;
 import com.quartzo.staffclock.utils.Constants;
 import com.quartzo.staffclock.utils.ListUtils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +66,9 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
         ResultCallback<Status>,
         Observer<List<Event>>,
         Callbacks.WorkTimeCallback,
-        LocationListener {
+        LocationListener,
+        TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {
 
     private static final int RC_ACCESS_FINE_LOCATION = 1;
     private static final int RC_PLACE_PICKER = 2;
@@ -137,11 +144,19 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
             }
         });
 
-        com.github.clans.fab.FloatingActionButton fab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        com.github.clans.fab.FloatingActionButton fabCam = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_btn_camera);
+        fabCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchActivity();
+            }
+        });
+
+        com.github.clans.fab.FloatingActionButton fabFinger = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_btn_finger);
+        fabFinger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchDatePicker();
             }
         });
     }
@@ -157,6 +172,33 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
                 addGeofence();
             }
         }
+    }
+
+    private void launchDatePicker() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                WorkTimeActivity.this,
+                now.get(Calendar.YEAR), // Initial year selection
+                now.get(Calendar.MONTH), // Initial month selection
+                now.get(Calendar.DAY_OF_MONTH) // Inital day selection
+        );
+
+        // If you're calling this from an AppCompatActivity
+        dpd.show(getSupportFragmentManager(), "Datepickerdialog");
+    }
+
+    private void launchTimePicker() {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog dpd = TimePickerDialog.newInstance(
+                WorkTimeActivity.this,
+                now.get(Calendar.HOUR),
+                now.get(Calendar.MINUTE),
+                now.get(Calendar.SECOND),
+                true
+        );
+
+        // If you're calling this from an AppCompatActivity
+        dpd.show(getSupportFragmentManager(), "Timepickerdialog");
     }
 
     public void launchPickActivity(){
@@ -429,6 +471,27 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onLocationChanged(Location location) {
         Toast.makeText(this,"Lat: " + location.getLatitude() + "Lng : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+//        Toast.makeText(mContext,"hourOfDay: " + hourOfDay + "minute: " + minute + "second: "+ second,Toast.LENGTH_SHORT).show();
+        mEventViewModel.setTime(hourOfDay,minute,second);
+        try{
+            mEventViewModel.saveEvent();
+            Toast.makeText(mContext,mEventViewModel.getDateTime() + " saved",Toast.LENGTH_SHORT).show();
+        }catch (DateTimeNotFoundException ex){
+            ex.printStackTrace();
+            Toast.makeText(mContext,"Something went wrong",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+//        Toast.makeText(mContext,"year: " + year + "month: " + monthOfYear + "day: "+ dayOfMonth,Toast.LENGTH_SHORT).show();
+        mEventViewModel.setDate(dayOfMonth,monthOfYear,year);
+        launchTimePicker();
     }
 }
 

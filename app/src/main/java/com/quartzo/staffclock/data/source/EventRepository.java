@@ -68,8 +68,8 @@ public class EventRepository implements EventDataSource {
     }
 
     @Override
-    public LiveData<List<Event>> getEventsByDate(String date, String type) {
-        return mEventDataSource.getEventsByDate(date,type);
+    public LiveData<List<Event>> getEventsByDate(String date) {
+        return mEventDataSource.getEventsByDate(date);
     }
 
     @Override

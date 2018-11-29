@@ -7,7 +7,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class DateUtils {
 
-    private static DateTimeFormatter dtfTime = DateTimeFormat.forPattern("HH:mm:ss");
+    private static DateTimeFormatter dtfTime = DateTimeFormat.forPattern("HH:mm");
     private static DateTimeFormatter dtfDate = DateTimeFormat.forPattern("yyyy-MM-dd");
     private static DateTimeFormatter dtfDateDDMMYY = DateTimeFormat.forPattern("dd/MM/yyyy");
 

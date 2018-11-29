@@ -5,4 +5,7 @@
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorAccent">#FF5722</color>
     <color name="colorAccentPressed">#ff9a7a</color>
+
+    <color name="mdtp_accent_color">@color/colorPrimary</color>
+    <color name="mdtp_accent_color_dark">@color/colorPrimaryDark</color>
 </resources>

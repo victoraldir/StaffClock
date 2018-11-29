@@ -5,6 +5,7 @@ import com.quartzo.staffclock.data.Event;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,4 +56,29 @@ public class ListUtils {
         return localTimeMap;
     }
 
+    public static List<Event> getListByType(List<Event> events, String type){
+
+        List<Event> result = new ArrayList<>();
+
+        if(type.equals("REAL")){
+
+            for (Event event: events) {
+                if(event.getType().equals(Constants.TYPE_CAMERA) ||
+                        event.getType().equals(Constants.TYPE_MANUAL)){
+                    result.add(event);
+                }
+            }
+
+        }else if(type.equals("GEOFENCE")){
+
+            for (Event event: events) {
+                if(event.getType().equals(Constants.TYPE_GEOFENCE)){
+                    result.add(event);
+                }
+            }
+        }
+
+        return result;
+
+    }
 }

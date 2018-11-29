@@ -34,20 +34,20 @@ public abstract class StaffClockDatabase extends RoomDatabase {
     private static final RoomDatabase.Callback callback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase database) {
-            initialScript(database);
+//            initialScript(database);
             super.onCreate(database);
         }
     };
 
-    private static void initialScript(SupportSQLiteDatabase database){
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 07:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 12:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 13:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 17:00:00')");
-
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 07:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 12:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 13:00:00')");
-        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 17:00:00')");
-    }
+//    private static void initialScript(SupportSQLiteDatabase database){
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 07:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 12:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 13:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-25 17:00:00')");
+//
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 07:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 12:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 13:00:00')");
+//        database.execSQL("insert into event(type,date_time) values ('REAL','2018-07-26 17:00:00')");
+//    }
 }

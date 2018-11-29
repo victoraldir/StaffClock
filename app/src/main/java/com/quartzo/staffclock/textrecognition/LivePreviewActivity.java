@@ -296,7 +296,7 @@ public final class LivePreviewActivity extends AppCompatActivity
       dateSet.add(date);
       vibrate();
 
-      Event event = new Event(Constants.TYPE_REAL, DateTimeUtils.formatDate(date));
+      Event event = new Event(Constants.TYPE_CAMERA, DateTimeUtils.formatDate(date));
 
       mEventViewModel.insertEvent(event);
 

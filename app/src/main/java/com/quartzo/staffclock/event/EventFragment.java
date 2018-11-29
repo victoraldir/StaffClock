@@ -16,6 +16,7 @@ import com.quartzo.staffclock.R;
 import com.quartzo.staffclock.ViewModelFactory;
 import com.quartzo.staffclock.data.Event;
 import com.quartzo.staffclock.interfaces.Callbacks;
+import com.quartzo.staffclock.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class EventFragment extends Fragment implements Observer<List<Event>>{
     public static final String ARG_TYPE = ".type";
     private EventAdapter mAdapter;
     private Callbacks.EventCallback mCallback;
+    private String mType;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -42,9 +44,9 @@ public class EventFragment extends Fragment implements Observer<List<Event>>{
 
         String dateArgument = args.getString(ARG_DATE);
         String timeArgument = args.getString(ARG_TIME);
-        String type = args.getString(ARG_TYPE);
+        mType = args.getString(ARG_TYPE);
 
-        mEventViewModel.getListEventsByDate(dateArgument, type).observe(this,this);
+        mEventViewModel.getListEventsByDate(dateArgument).observe(this,this);
 
         RecyclerView mWorkTimeRecycle = (RecyclerView) rootView.findViewById(R.id.work_time_recycle);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -76,6 +78,7 @@ public class EventFragment extends Fragment implements Observer<List<Event>>{
     // 30/07/2018 08:45
     @Override
     public void onChanged(@Nullable List<Event> eventList) {
-        mAdapter.swapData(eventList);
+        mAdapter.swapData(ListUtils.getListByType(eventList,mType));
     }
+
 }
