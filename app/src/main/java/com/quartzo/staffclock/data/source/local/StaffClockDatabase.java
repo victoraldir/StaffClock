@@ -23,7 +23,7 @@ public abstract class StaffClockDatabase extends RoomDatabase {
         synchronized (sLock) {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                        StaffClockDatabase.class, "StaffClock.db")
+                        StaffClockDatabase.class, "AppStaffClock.db")
                         .addCallback(callback)
                         .build();
             }
