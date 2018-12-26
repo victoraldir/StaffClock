@@ -80,8 +80,8 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
     private Context mContext;
     private WorkTimeViewModel mEventViewModel;
     private RecyclerView mWorkTimeRecycle;
-    private WorkTimeAdapter mAdapter;
-    private Map<String, LocalTime> mLocalTimeMap;
+    private WorkTimeViewAdapter mAdapter;
+//    private Map<String, LocalTime> mLocalTimeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +104,9 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
                 linearLayoutManager.getOrientation());
         mWorkTimeRecycle.addItemDecoration(dividerItemDecoration);
 
-        mLocalTimeMap = new HashMap<>();
-        mAdapter = new WorkTimeAdapter(mLocalTimeMap, this);
+//        mLocalTimeMap = new ArrayList<>()
+        mAdapter = new WorkTimeViewAdapter(new ArrayList<Event>(), this);
+
 
         mWorkTimeRecycle.setAdapter(mAdapter);
 
@@ -454,8 +455,8 @@ public class WorkTimeActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     public void onChanged(@Nullable List<Event> eventList) {
-        mLocalTimeMap = ListUtils.calculateWorkTime(eventList);
-        mAdapter.swapData(mLocalTimeMap);
+//        mLocalTimeMap = ListUtils.calculateWorkTime(eventList);
+        mAdapter.swapData(eventList);
     }
 
     @Override

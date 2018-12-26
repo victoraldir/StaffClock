@@ -33,7 +33,7 @@ public class EventDataSourceImpl implements EventDataSource {
 
     @Override
     public LiveData<List<Event>> getEvents() {
-        return mEventDao.getEvents();
+        return mEventDao.getEventView();
     }
 
     // 30/07/2018 08:00

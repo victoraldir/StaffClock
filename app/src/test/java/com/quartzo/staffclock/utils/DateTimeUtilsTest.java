@@ -1,8 +1,8 @@
 package com.quartzo.staffclock.utils;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DateTimeUtilsTest {
 
@@ -11,7 +11,7 @@ public class DateTimeUtilsTest {
 
         String dateString = "12/12/1990";
 
-        Assert.assertTrue(DateTimeUtils.matchDate(dateString));
+        assertTrue(DateTimeUtils.matchDate(dateString));
 
     }
 
@@ -20,7 +20,7 @@ public class DateTimeUtilsTest {
 
         String timeString = "13:21";
 
-        Assert.assertTrue(DateTimeUtils.matchTime(timeString));
+        assertTrue(DateTimeUtils.matchTime(timeString));
 
     }
 
@@ -31,7 +31,36 @@ public class DateTimeUtilsTest {
 
         System.out.print(DateTimeUtils.parseToDate(dateTimeString));
 
-        Assert.assertNotNull(DateTimeUtils.parseToDate(dateTimeString));
+        assertNotNull(DateTimeUtils.parseToDate(dateTimeString));
+
+    }
+
+    @Test
+    public void shouldCalculateWorkedTime(){
+
+        String timeCommaSeparated = "01:04:42,01:10:49,01:15:19,01:20:07,06:45:27";
+
+        String workedTime = DateTimeUtils.calculateWorkedTime(timeCommaSeparated);
+
+        System.out.println(workedTime);
+        assertNotNull(workedTime);
+        assertEquals("00:10:55",workedTime);
+
+        timeCommaSeparated = "01:04:42,01:10:49,01:15:19,01:20:07";
+
+        workedTime = DateTimeUtils.calculateWorkedTime(timeCommaSeparated);
+
+        System.out.println(workedTime);
+        assertNotNull(workedTime);
+        assertEquals("00:10:55",workedTime);
+
+        timeCommaSeparated = "01:04:42,01:10:49,01:15:19";
+
+        workedTime = DateTimeUtils.calculateWorkedTime(timeCommaSeparated);
+
+        System.out.println(workedTime);
+        assertNotNull(workedTime);
+        assertEquals("00:06:07",workedTime);
 
     }
 }
