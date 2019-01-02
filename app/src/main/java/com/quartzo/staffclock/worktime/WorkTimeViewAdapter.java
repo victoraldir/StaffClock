@@ -48,7 +48,13 @@ public class WorkTimeViewAdapter extends RecyclerView.Adapter<WorkTimeViewAdapte
 
         final Event event = mEvents.get(position);
 
-        final String workedTime = DateTimeUtils.calculateWorkedTime(event.getTimeComma());
+        String workedTime;
+
+        if(event.getTimeComma() == null){
+            workedTime = "NO MARK"; //TODO externalize it
+        }else{
+            workedTime = DateTimeUtils.calculateWorkedTime(event.getTimeComma());
+        }
 
         holder.title.setText(DateUtils.formatDateDDMMYYY(event.getDateTime()));
         holder.subtitle.setText(workedTime);
